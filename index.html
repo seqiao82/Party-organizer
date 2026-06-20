@@ -3,6 +3,859 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PlayMate 陪玩预约原型</title>
+  <style>
+    :root {
+      --ink: #1f2328;
+      --muted: #647085;
+      --line: #d8dee8;
+      --panel: #ffffff;
+      --bg: #f3f6f8;
+      --dark: #151a22;
+      --green: #14795f;
+      --green-dark: #0e5d49;
+      --blue: #2b5f9f;
+      --pink: #c05275;
+      --amber: #a76c1d;
+      --red: #b94343;
+      --shadow: 0 16px 40px rgba(31, 35, 40, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(20, 121, 95, 0.09), transparent 36%),
+        linear-gradient(315deg, rgba(43, 95, 159, 0.09), transparent 38%),
+        var(--bg);
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+    }
+
+    .sidebar {
+      background: var(--dark);
+      color: #f5fbf9;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #141820;
+      background: linear-gradient(135deg, #8be2c8, #f6cf6b);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: #aebbc6;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      height: 42px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 12px;
+      color: #d9e5e1;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .side-card {
+      margin-top: auto;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #c8d6d2;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    main {
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 7px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .primary {
+      height: 42px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 16px;
+      color: #ffffff;
+      background: var(--green);
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(20, 121, 95, 0.22);
+      white-space: nowrap;
+    }
+
+    .primary:hover {
+      background: var(--green-dark);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(340px, 430px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 18px 0;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #17624f;
+      background: #e7f5f0;
+      white-space: nowrap;
+    }
+
+    .pill.off {
+      color: #7a3a3a;
+      background: #fae8e8;
+    }
+
+    .form,
+    .content {
+      padding: 18px;
+    }
+
+    .form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #cfd6e2;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(20, 121, 95, 0.14);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .service-list,
+    .slot-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .service,
+    .slot,
+    .booking {
+      border: 1px solid #e2e7ee;
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 12px;
+    }
+
+    .service {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .service.active {
+      border-color: var(--green);
+      background: #f3fbf8;
+    }
+
+    .service strong,
+    .slot strong,
+    .booking strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .service span,
+    .slot span,
+    .booking span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .price {
+      font-weight: 800;
+      color: var(--green-dark);
+      white-space: nowrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      min-height: 88px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .slot {
+      min-height: 112px;
+      position: relative;
+    }
+
+    .slot.available {
+      border-color: #bfe4d8;
+      background: #f6fcfa;
+    }
+
+    .slot.closed {
+      opacity: 0.78;
+      background: #f2f3f5;
+    }
+
+    .slot.booked {
+      border-color: #f0d0d8;
+      background: #fff7f9;
+    }
+
+    .slot button {
+      margin-top: 12px;
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid #cdd5df;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #344054;
+      cursor: pointer;
+    }
+
+    .slot.available button {
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+
+    .slot.closed button {
+      color: #8a94a3;
+      cursor: default;
+    }
+
+    .slot.booked button {
+      color: var(--red);
+      cursor: default;
+    }
+
+    .checkout {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid #dcebe7;
+      border-radius: 8px;
+      background: #f7fbfa;
+    }
+
+    .checkout-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #344054;
+      font-size: 14px;
+    }
+
+    .checkout-line.total {
+      padding-top: 10px;
+      border-top: 1px solid #d7e7e2;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .secondary {
+      min-height: 38px;
+      border: 1px solid #ccd4df;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #344054;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .secondary:hover {
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      gap: 16px;
+    }
+
+    .booking-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .booking {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #ffffff;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .tag.blue { background: var(--blue); }
+    .tag.pink { background: var(--pink); }
+    .tag.amber { background: var(--amber); }
+    .tag.green { background: var(--green); }
+
+    .toggle-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .toggle-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #e2e7ee;
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .switch {
+      width: 48px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      padding: 3px;
+      background: #bac4d0;
+      cursor: pointer;
+    }
+
+    .switch::before {
+      content: "";
+      display: block;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: transform 0.18s ease;
+    }
+
+    .switch.on {
+      background: var(--green);
+    }
+
+    .switch.on::before {
+      transform: translateX(20px);
+    }
+
+    @media (max-width: 1060px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+      }
+
+      .nav {
+        display: flex;
+        min-width: max-content;
+      }
+
+      .side-card {
+        display: none;
+      }
+
+      .layout,
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 18px;
+      }
+
+      .topbar,
+      .row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .primary {
+        width: 100%;
+      }
+
+      .stats,
+      .calendar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .stats,
+      .calendar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">P</div>
+        <div>
+          <strong>PlayMate</strong>
+          <span>陪玩预约工作台</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="主要功能">
+        <button class="active">预约页面</button>
+        <button>时间管理</button>
+        <button>订单后台</button>
+        <button>收入记录</button>
+      </nav>
+      <div class="side-card">
+        一个面向客户的预约页，加一个你自己能看的后台：开关时段、看订单、确认付款。
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1>陪玩时间预约</h1>
+          <p class="subtitle">访客可以查看你的空档，选择陪玩项目和时间，填写联系方式并完成下单。你在后台查看预约、管理时段开启状态和订单进度。</p>
+        </div>
+        <button class="primary" id="checkoutBtn">模拟下单</button>
+      </div>
+
+      <section class="layout" aria-label="陪玩预约界面">
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">客户预约</h2>
+              <span class="pill">前台页面</span>
+            </div>
+            <div class="form">
+              <label>
+                想玩的内容
+                <select id="gameSelect">
+                  <option>英雄联盟双排</option>
+                  <option>王者荣耀上分</option>
+                  <option>Steam 休闲联机</option>
+                  <option>聊天陪伴</option>
+                </select>
+              </label>
+              <div class="row">
+                <label>
+                  预约日期
+                  <input id="dateInput" value="本周六">
+                </label>
+                <label>
+                  联系方式
+                  <input id="contactInput" value="微信 / Discord">
+                </label>
+              </div>
+              <label>
+                备注
+                <textarea id="noteInput">希望轻松一点，主要想有人一起玩和聊天。</textarea>
+              </label>
+
+              <div class="service-list" aria-label="服务项目">
+                <div class="service active" data-service="基础陪玩 1 小时" data-price="28">
+                  <div>
+                    <strong>基础陪玩 1 小时</strong>
+                    <span>适合临时开黑、聊天、熟悉节奏。</span>
+                  </div>
+                  <div class="price">$28</div>
+                </div>
+                <div class="service" data-service="深度陪玩 2 小时" data-price="50">
+                  <div>
+                    <strong>深度陪玩 2 小时</strong>
+                    <span>适合排位、任务推进或固定游戏夜。</span>
+                  </div>
+                  <div class="price">$50</div>
+                </div>
+                <div class="service" data-service="包场 3 小时" data-price="72">
+                  <div>
+                    <strong>包场 3 小时</strong>
+                    <span>适合朋友组队、活动陪玩或长时间陪伴。</span>
+                  </div>
+                  <div class="price">$72</div>
+                </div>
+              </div>
+
+              <div class="checkout">
+                <div class="checkout-line">
+                  <span>已选项目</span>
+                  <strong id="selectedService">基础陪玩 1 小时</strong>
+                </div>
+                <div class="checkout-line">
+                  <span>已选时间</span>
+                  <strong id="selectedSlot">周六 20:00</strong>
+                </div>
+                <div class="checkout-line total">
+                  <span>应付金额</span>
+                  <strong id="selectedPrice">$28</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="stats">
+            <div class="metric">
+              <span>今日预约</span>
+              <strong>3</strong>
+            </div>
+            <div class="metric">
+              <span>开放时段</span>
+              <strong id="openCount">5</strong>
+            </div>
+            <div class="metric">
+              <span>待确认</span>
+              <strong>2</strong>
+            </div>
+            <div class="metric">
+              <span>本周收入</span>
+              <strong>$178</strong>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">可预约时间</h2>
+              <span class="pill">客户可见</span>
+            </div>
+            <div class="content">
+              <div class="calendar" aria-label="可预约时间">
+                <div class="slot available" data-slot="周五 19:00">
+                  <strong>周五 19:00</strong>
+                  <span>空闲，可预约 1-2 小时</span>
+                  <button>选择</button>
+                </div>
+                <div class="slot booked" data-slot="周五 21:00">
+                  <strong>周五 21:00</strong>
+                  <span>已被 Alex 预约</span>
+                  <button>已订满</button>
+                </div>
+                <div class="slot available" data-slot="周六 20:00">
+                  <strong>周六 20:00</strong>
+                  <span>热门时段，建议提前付款锁定</span>
+                  <button>已选择</button>
+                </div>
+                <div class="slot closed" data-slot="周六 22:00">
+                  <strong>周六 22:00</strong>
+                  <span>后台已关闭</span>
+                  <button>不可预约</button>
+                </div>
+                <div class="slot available" data-slot="周日 15:00">
+                  <strong>周日 15:00</strong>
+                  <span>适合休闲联机或聊天</span>
+                  <button>选择</button>
+                </div>
+                <div class="slot available" data-slot="周日 20:00">
+                  <strong>周日 20:00</strong>
+                  <span>可安排双排或组队</span>
+                  <button>选择</button>
+                </div>
+                <div class="slot closed" data-slot="周一 19:00">
+                  <strong>周一 19:00</strong>
+                  <span>后台已关闭</span>
+                  <button>不可预约</button>
+                </div>
+                <div class="slot available" data-slot="周二 21:00">
+                  <strong>周二 21:00</strong>
+                  <span>可预约 1 小时</span>
+                  <button>选择</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">后台订单</h2>
+                <span class="pill">仅管理员</span>
+              </div>
+              <div class="content">
+                <div class="booking-list">
+                  <div class="booking">
+                    <div>
+                      <strong>Alex · 周五 21:00</strong>
+                      <span>英雄联盟双排 · 2 小时 · 已付款</span>
+                    </div>
+                    <span class="tag green">已确认</span>
+                  </div>
+                  <div class="booking">
+                    <div>
+                      <strong>Mina · 周六 20:00</strong>
+                      <span>聊天陪伴 · 1 小时 · 待付款</span>
+                    </div>
+                    <span class="tag amber">待确认</span>
+                  </div>
+                  <div class="booking">
+                    <div>
+                      <strong>Chris · 周日 15:00</strong>
+                      <span>Steam 休闲联机 · 3 小时 · 新订单</span>
+                    </div>
+                    <span class="tag blue">新预约</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">时段开关</h2>
+                <span class="pill off">后台控制</span>
+              </div>
+              <div class="content">
+                <div class="toggle-list">
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周五 19:00</strong>
+                      <span>开放给客户预约</span>
+                    </div>
+                    <button class="switch on" aria-label="周五 19:00 开关"></button>
+                  </div>
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周六 22:00</strong>
+                      <span>暂时不接单</span>
+                    </div>
+                    <button class="switch" aria-label="周六 22:00 开关"></button>
+                  </div>
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周日 20:00</strong>
+                      <span>开放给客户预约</span>
+                    </div>
+                    <button class="switch on" aria-label="周日 20:00 开关"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const services = document.querySelectorAll(".service");
+    const slots = document.querySelectorAll(".slot.available");
+    const switches = document.querySelectorAll(".switch");
+    const selectedService = document.querySelector("#selectedService");
+    const selectedSlot = document.querySelector("#selectedSlot");
+    const selectedPrice = document.querySelector("#selectedPrice");
+    const checkoutBtn = document.querySelector("#checkoutBtn");
+    const openCount = document.querySelector("#openCount");
+
+    services.forEach((service) => {
+      service.addEventListener("click", () => {
+        services.forEach((item) => item.classList.remove("active"));
+        service.classList.add("active");
+        selectedService.textContent = service.dataset.service;
+        selectedPrice.textContent = `$${service.dataset.price}`;
+      });
+    });
+
+    slots.forEach((slot) => {
+      slot.addEventListener("click", () => {
+        slots.forEach((item) => {
+          const button = item.querySelector("button");
+          if (button) button.textContent = "选择";
+        });
+        const button = slot.querySelector("button");
+        if (button) button.textContent = "已选择";
+        selectedSlot.textContent = slot.dataset.slot;
+      });
+    });
+
+    switches.forEach((button) => {
+      button.addEventListener("click", () => {
+        button.classList.toggle("on");
+        openCount.textContent = document.querySelectorAll(".switch.on").length + 3;
+      });
+    });
+
+    checkoutBtn.addEventListener("click", () => {
+      checkoutBtn.textContent = "订单已生成";
+      window.setTimeout(() => {
+        checkoutBtn.textContent = "模拟下单";
+      }, 1800);
+    });
+  </script>
+</body>
+</html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GatherFlow 派对助理原型</title>
   <style>
     :root {
