@@ -3,20 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GatherFlow 派对助理原型</title>
+  <title>PlayMate 陪玩预约原型</title>
   <style>
     :root {
-      --ink: #202124;
-      --muted: #667085;
+      --ink: #1f2328;
+      --muted: #647085;
       --line: #d8dee8;
-      --soft: #f5f7fb;
       --panel: #ffffff;
-      --accent: #1f7a68;
-      --accent-dark: #155648;
-      --blue: #2f5f98;
-      --coral: #c75d4f;
-      --gold: #a56b1f;
-      --shadow: 0 16px 38px rgba(26, 31, 44, 0.08);
+      --bg: #f3f6f8;
+      --dark: #151a22;
+      --green: #14795f;
+      --green-dark: #0e5d49;
+      --blue: #2b5f9f;
+      --pink: #c05275;
+      --amber: #a76c1d;
+      --red: #b94343;
+      --shadow: 0 16px 40px rgba(31, 35, 40, 0.09);
     }
 
     * {
@@ -29,9 +31,9 @@
       font-family: Inter, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(120deg, rgba(31, 122, 104, 0.08), transparent 34%),
-        linear-gradient(270deg, rgba(199, 93, 79, 0.08), transparent 36%),
-        var(--soft);
+        linear-gradient(135deg, rgba(20, 121, 95, 0.09), transparent 36%),
+        linear-gradient(315deg, rgba(43, 95, 159, 0.09), transparent 38%),
+        var(--bg);
     }
 
     button, input, textarea, select {
@@ -41,12 +43,12 @@
     .app {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 250px 1fr;
     }
 
     .sidebar {
-      background: #17211f;
-      color: #eef8f5;
+      background: var(--dark);
+      color: #f5fbf9;
       padding: 24px 18px;
       display: flex;
       flex-direction: column;
@@ -55,19 +57,19 @@
 
     .brand {
       display: flex;
-      align-items: center;
       gap: 12px;
+      align-items: center;
     }
 
-    .mark {
+    .logo {
       width: 42px;
       height: 42px;
       border-radius: 8px;
       display: grid;
       place-items: center;
-      color: #17211f;
       font-weight: 800;
-      background: linear-gradient(135deg, #f6d56f, #7ed1be);
+      color: #141820;
+      background: linear-gradient(135deg, #8be2c8, #f6cf6b);
     }
 
     .brand strong {
@@ -77,8 +79,10 @@
     }
 
     .brand span {
-      color: #a9bbb5;
+      display: block;
+      margin-top: 2px;
       font-size: 12px;
+      color: #aebbc6;
     }
 
     .nav {
@@ -87,32 +91,31 @@
     }
 
     .nav button {
-      width: 100%;
       height: 42px;
       border: 0;
       border-radius: 8px;
-      color: #dce9e5;
+      padding: 0 12px;
+      color: #d9e5e1;
       background: transparent;
       text-align: left;
-      padding: 0 12px;
       cursor: pointer;
     }
 
     .nav button.active,
     .nav button:hover {
-      background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    .sidebar-note {
+    .side-card {
       margin-top: auto;
+      padding: 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      padding: 14px;
-      color: #c8d8d4;
+      background: rgba(255, 255, 255, 0.05);
+      color: #c8d6d2;
       font-size: 13px;
       line-height: 1.5;
-      background: rgba(255, 255, 255, 0.05);
     }
 
     main {
@@ -128,39 +131,44 @@
     }
 
     h1 {
-      margin: 0 0 6px;
+      margin: 0 0 7px;
       font-size: 30px;
       letter-spacing: 0;
     }
 
     .subtitle {
-      color: var(--muted);
       margin: 0;
-      line-height: 1.5;
-      max-width: 720px;
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.55;
     }
 
     .primary {
+      height: 42px;
       border: 0;
       border-radius: 8px;
-      background: var(--accent);
-      color: #ffffff;
-      height: 42px;
       padding: 0 16px;
+      color: #ffffff;
+      background: var(--green);
       cursor: pointer;
-      box-shadow: 0 8px 18px rgba(31, 122, 104, 0.22);
+      box-shadow: 0 8px 20px rgba(20, 121, 95, 0.22);
       white-space: nowrap;
     }
 
     .primary:hover {
-      background: var(--accent-dark);
+      background: var(--green-dark);
     }
 
-    .grid {
+    .layout {
       display: grid;
-      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+      grid-template-columns: minmax(340px, 430px) minmax(0, 1fr);
       gap: 20px;
       align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
     }
 
     .panel {
@@ -171,11 +179,11 @@
     }
 
     .panel-header {
-      padding: 18px 18px 0;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
+      padding: 18px 18px 0;
     }
 
     .panel-title {
@@ -189,14 +197,23 @@
       height: 26px;
       border-radius: 999px;
       padding: 0 10px;
-      background: #e9f5f1;
-      color: #176653;
       font-size: 12px;
+      color: #17624f;
+      background: #e7f5f0;
       white-space: nowrap;
     }
 
-    .form {
+    .pill.off {
+      color: #7a3a3a;
+      background: #fae8e8;
+    }
+
+    .form,
+    .content {
       padding: 18px;
+    }
+
+    .form {
       display: grid;
       gap: 14px;
     }
@@ -211,24 +228,24 @@
 
     input, textarea, select {
       width: 100%;
+      min-height: 42px;
       border: 1px solid #cfd6e2;
       border-radius: 8px;
       background: #ffffff;
       color: var(--ink);
-      min-height: 42px;
       padding: 10px 11px;
       outline: none;
     }
 
     textarea {
+      min-height: 82px;
       resize: vertical;
-      min-height: 92px;
       line-height: 1.45;
     }
 
     input:focus, textarea:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(31, 122, 104, 0.14);
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(20, 121, 95, 0.14);
     }
 
     .row {
@@ -237,59 +254,69 @@
       gap: 12px;
     }
 
-    .friend-list {
+    .service-list,
+    .slot-list {
       display: grid;
-      gap: 9px;
+      gap: 10px;
     }
 
-    .friend {
-      display: flex;
-      justify-content: space-between;
+    .service,
+    .slot,
+    .booking {
+      border: 1px solid #e2e7ee;
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 12px;
+    }
+
+    .service {
+      display: grid;
+      grid-template-columns: 1fr auto;
       gap: 10px;
       align-items: center;
-      min-height: 46px;
-      padding: 9px 11px;
-      border: 1px solid #e4e8ef;
-      border-radius: 8px;
-      background: #fafbfc;
+      cursor: pointer;
     }
 
-    .friend span {
+    .service.active {
+      border-color: var(--green);
+      background: #f3fbf8;
+    }
+
+    .service strong,
+    .slot strong,
+    .booking strong {
       display: block;
+      font-size: 15px;
+    }
+
+    .service span,
+    .slot span,
+    .booking span {
+      display: block;
+      margin-top: 4px;
       color: var(--muted);
       font-size: 12px;
-      margin-top: 2px;
+      line-height: 1.4;
     }
 
-    .tag {
-      border-radius: 999px;
-      padding: 4px 8px;
-      color: #ffffff;
-      font-size: 11px;
+    .price {
+      font-weight: 800;
+      color: var(--green-dark);
       white-space: nowrap;
     }
 
-    .tag.blue { background: var(--blue); }
-    .tag.coral { background: var(--coral); }
-    .tag.gold { background: var(--gold); }
-
-    .results {
-      display: grid;
-      gap: 16px;
-    }
-
-    .overview {
+    .stats {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
     }
 
     .metric {
-      min-height: 92px;
+      min-height: 88px;
       padding: 14px;
-      background: #ffffff;
       border: 1px solid var(--line);
       border-radius: 8px;
+      background: #ffffff;
       box-shadow: var(--shadow);
     }
 
@@ -304,98 +331,80 @@
       font-size: 22px;
     }
 
-    .columns {
+    .calendar {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .content {
-      padding: 16px 18px 18px;
-    }
-
-    .message-box {
-      margin: 0;
-      padding: 14px;
-      border-radius: 8px;
-      background: #f7faf9;
-      border: 1px solid #dcebe7;
-      line-height: 1.58;
-      color: #243b35;
-    }
-
-    .option {
-      display: grid;
-      gap: 8px;
-      padding: 12px 0;
-      border-top: 1px solid #edf0f4;
-    }
-
-    .option:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .option strong {
-      font-size: 15px;
-    }
-
-    .option p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 13px;
-    }
-
-    .checklist {
-      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
     }
 
-    .checklist li {
-      display: grid;
-      grid-template-columns: 24px 1fr;
-      gap: 9px;
-      align-items: start;
-      line-height: 1.45;
-      color: #344054;
-    }
-
-    .box {
-      width: 18px;
-      height: 18px;
-      margin-top: 1px;
-      border-radius: 5px;
-      border: 1px solid #aab4c3;
-      background: #ffffff;
-    }
-
-    .box.done {
-      background: var(--accent);
-      border-color: var(--accent);
+    .slot {
+      min-height: 112px;
       position: relative;
     }
 
-    .box.done::after {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 2px;
-      width: 5px;
-      height: 10px;
-      border: solid #ffffff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
+    .slot.available {
+      border-color: #bfe4d8;
+      background: #f6fcfa;
     }
 
-    .footer-actions {
-      display: flex;
-      flex-wrap: wrap;
+    .slot.closed {
+      opacity: 0.78;
+      background: #f2f3f5;
+    }
+
+    .slot.booked {
+      border-color: #f0d0d8;
+      background: #fff7f9;
+    }
+
+    .slot button {
+      margin-top: 12px;
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid #cdd5df;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #344054;
+      cursor: pointer;
+    }
+
+    .slot.available button {
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+
+    .slot.closed button {
+      color: #8a94a3;
+      cursor: default;
+    }
+
+    .slot.booked button {
+      color: var(--red);
+      cursor: default;
+    }
+
+    .checkout {
+      display: grid;
       gap: 10px;
-      padding: 0 18px 18px;
+      padding: 14px;
+      border: 1px solid #dcebe7;
+      border-radius: 8px;
+      background: #f7fbfa;
+    }
+
+    .checkout-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #344054;
+      font-size: 14px;
+    }
+
+    .checkout-line.total {
+      padding-top: 10px;
+      border-top: 1px solid #d7e7e2;
+      font-weight: 800;
+      color: var(--ink);
     }
 
     .secondary {
@@ -409,11 +418,89 @@
     }
 
     .secondary:hover {
-      border-color: var(--accent);
-      color: var(--accent-dark);
+      border-color: var(--green);
+      color: var(--green-dark);
     }
 
-    @media (max-width: 980px) {
+    .admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      gap: 16px;
+    }
+
+    .booking-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .booking {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #ffffff;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .tag.blue { background: var(--blue); }
+    .tag.pink { background: var(--pink); }
+    .tag.amber { background: var(--amber); }
+    .tag.green { background: var(--green); }
+
+    .toggle-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .toggle-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #e2e7ee;
+      border-radius: 8px;
+      background: #fbfcfd;
+    }
+
+    .switch {
+      width: 48px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      padding: 3px;
+      background: #bac4d0;
+      cursor: pointer;
+    }
+
+    .switch::before {
+      content: "";
+      display: block;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: transform 0.18s ease;
+    }
+
+    .switch.on {
+      background: var(--green);
+    }
+
+    .switch.on::before {
+      transform: translateX(20px);
+    }
+
+    @media (max-width: 1060px) {
       .app {
         grid-template-columns: 1fr;
       }
@@ -424,46 +511,50 @@
         overflow-x: auto;
       }
 
-      .sidebar-note {
-        display: none;
-      }
-
       .nav {
         display: flex;
         min-width: max-content;
       }
 
-      .nav button {
-        width: auto;
+      .side-card {
+        display: none;
       }
 
-      .grid,
-      .columns {
+      .layout,
+      .admin-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 720px) {
       main {
         padding: 18px;
       }
 
       .topbar,
       .row {
-        grid-template-columns: 1fr;
         display: grid;
+        grid-template-columns: 1fr;
       }
 
       .primary {
         width: 100%;
       }
 
-      .overview {
+      .stats,
+      .calendar {
         grid-template-columns: 1fr 1fr;
       }
 
       h1 {
         font-size: 25px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .stats,
+      .calendar {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -472,196 +563,238 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="mark">G</div>
+        <div class="logo">P</div>
         <div>
-          <strong>GatherFlow</strong>
-          <span>你的派对组织 Agent</span>
+          <strong>PlayMate</strong>
+          <span>陪玩预约工作台</span>
         </div>
       </div>
       <nav class="nav" aria-label="主要功能">
-        <button class="active">本周派对</button>
-        <button>朋友资料</button>
-        <button>餐饮推荐</button>
-        <button>邀请记录</button>
+        <button class="active">预约页面</button>
+        <button>时间管理</button>
+        <button>订单后台</button>
+        <button>收入记录</button>
       </nav>
-      <div class="sidebar-note">
-        第一版重点：帮你把人、时间、吃什么、怎么邀请和准备事项放到一个地方。
+      <div class="side-card">
+        一个面向客户的预约页，加一个你自己能看的后台：开关时段、看订单、确认付款。
       </div>
     </aside>
 
     <main>
       <div class="topbar">
         <div>
-          <h1>周末家里小聚</h1>
-          <p class="subtitle">输入派对信息和朋友偏好，Agent 会生成邀请文案、菜单方向、餐厅搜索关键词和准备清单。</p>
+          <h1>陪玩时间预约</h1>
+          <p class="subtitle">访客可以查看你的空档，选择陪玩项目和时间，填写联系方式并完成下单。你在后台查看预约、管理时段开启状态和订单进度。</p>
         </div>
-        <button class="primary" id="generateBtn">生成派对方案</button>
+        <button class="primary" id="checkoutBtn">模拟下单</button>
       </div>
 
-      <section class="grid" aria-label="派对规划界面">
-        <div class="panel">
-          <div class="panel-header">
-            <h2 class="panel-title">派对信息</h2>
-            <span class="pill">草稿</span>
-          </div>
-          <div class="form">
-            <div class="row">
-              <label>
-                日期
-                <input id="dateInput" value="本周六">
-              </label>
-              <label>
-                时间
-                <input id="timeInput" value="晚上 7:00">
-              </label>
+      <section class="layout" aria-label="陪玩预约界面">
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">客户预约</h2>
+              <span class="pill">前台页面</span>
             </div>
-            <label>
-              地点
-              <input value="我们家">
-            </label>
-            <div class="row">
+            <div class="form">
               <label>
-                人数
-                <select id="guestCount">
-                  <option>8-10 人</option>
-                  <option>5-7 人</option>
-                  <option>11-14 人</option>
+                想玩的内容
+                <select id="gameSelect">
+                  <option>英雄联盟双排</option>
+                  <option>王者荣耀上分</option>
+                  <option>Steam 休闲联机</option>
+                  <option>聊天陪伴</option>
                 </select>
               </label>
+              <div class="row">
+                <label>
+                  预约日期
+                  <input id="dateInput" value="本周六">
+                </label>
+                <label>
+                  联系方式
+                  <input id="contactInput" value="微信 / Discord">
+                </label>
+              </div>
               <label>
-                预算
-                <select id="budget">
-                  <option>约 $180</option>
-                  <option>约 $120</option>
-                  <option>约 $250</option>
-                </select>
+                备注
+                <textarea id="noteInput">希望轻松一点，主要想有人一起玩和聊天。</textarea>
               </label>
-            </div>
-            <label>
-              派对感觉
-              <select id="vibe">
-                <option>轻松晚餐 + 聊天</option>
-                <option>桌游夜</option>
-                <option>生日小聚</option>
-                <option>电影夜</option>
-              </select>
-            </label>
-            <label>
-              朋友和偏好
-              <textarea id="friendsInput">Mia: 素食，喜欢泰餐
-Alex: 不吃牛肉，可以带饮料
-Jamie: 爱吃辣，可能开车
-Chris: 喜欢甜点，周六比较晚到</textarea>
-            </label>
 
-            <div class="friend-list" aria-label="朋友摘要">
-              <div class="friend">
-                <div><strong>Mia</strong><span>素食，泰餐</span></div>
-                <span class="tag blue">饮食限制</span>
+              <div class="service-list" aria-label="服务项目">
+                <div class="service active" data-service="基础陪玩 1 小时" data-price="28">
+                  <div>
+                    <strong>基础陪玩 1 小时</strong>
+                    <span>适合临时开黑、聊天、熟悉节奏。</span>
+                  </div>
+                  <div class="price">$28</div>
+                </div>
+                <div class="service" data-service="深度陪玩 2 小时" data-price="50">
+                  <div>
+                    <strong>深度陪玩 2 小时</strong>
+                    <span>适合排位、任务推进或固定游戏夜。</span>
+                  </div>
+                  <div class="price">$50</div>
+                </div>
+                <div class="service" data-service="包场 3 小时" data-price="72">
+                  <div>
+                    <strong>包场 3 小时</strong>
+                    <span>适合朋友组队、活动陪玩或长时间陪伴。</span>
+                  </div>
+                  <div class="price">$72</div>
+                </div>
               </div>
-              <div class="friend">
-                <div><strong>Alex</strong><span>不吃牛肉，可带饮料</span></div>
-                <span class="tag coral">可帮忙</span>
-              </div>
-              <div class="friend">
-                <div><strong>Jamie</strong><span>爱吃辣，可能开车</span></div>
-                <span class="tag gold">口味偏好</span>
+
+              <div class="checkout">
+                <div class="checkout-line">
+                  <span>已选项目</span>
+                  <strong id="selectedService">基础陪玩 1 小时</strong>
+                </div>
+                <div class="checkout-line">
+                  <span>已选时间</span>
+                  <strong id="selectedSlot">周六 20:00</strong>
+                </div>
+                <div class="checkout-line total">
+                  <span>应付金额</span>
+                  <strong id="selectedPrice">$28</strong>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="results">
-          <div class="overview">
+        <div class="stack">
+          <div class="stats">
             <div class="metric">
-              <span>预计人数</span>
-              <strong id="metricGuests">8-10</strong>
+              <span>今日预约</span>
+              <strong>3</strong>
             </div>
             <div class="metric">
-              <span>建议预算</span>
-              <strong id="metricBudget">$180</strong>
-            </div>
-            <div class="metric">
-              <span>菜单方向</span>
-              <strong>3 套</strong>
+              <span>开放时段</span>
+              <strong id="openCount">5</strong>
             </div>
             <div class="metric">
               <span>待确认</span>
-              <strong>4 人</strong>
+              <strong>2</strong>
+            </div>
+            <div class="metric">
+              <span>本周收入</span>
+              <strong>$178</strong>
             </div>
           </div>
 
-          <div class="columns">
-            <div class="panel">
-              <div class="panel-header">
-                <h2 class="panel-title">邀请文案</h2>
-                <span class="pill">可复制</span>
-              </div>
-              <div class="content">
-                <p class="message-box" id="inviteText">这周六晚上 7 点来我们家吃点东西、聊聊天吧。我会准备适合大家的轻松晚餐，也会照顾素食和不吃牛肉的选择。你只要带着自己来就好，如果想带饮料或甜点也欢迎。能不能来回我一下，我好确认份量。</p>
-              </div>
-              <div class="footer-actions">
-                <button class="secondary">复制中文邀请</button>
-                <button class="secondary">生成英文版</button>
-                <button class="secondary">生成私信版</button>
-              </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">可预约时间</h2>
+              <span class="pill">客户可见</span>
             </div>
-
-            <div class="panel">
-              <div class="panel-header">
-                <h2 class="panel-title">吃什么方案</h2>
-                <span class="pill">Agent 推荐</span>
-              </div>
-              <div class="content">
-                <div class="option">
-                  <strong>方案 A：泰式外卖 + 小食</strong>
-                  <p>适合素食和爱吃辣的人。搜索关键词：nearby Thai restaurant vegetarian group order。</p>
+            <div class="content">
+              <div class="calendar" aria-label="可预约时间">
+                <div class="slot available" data-slot="周五 19:00">
+                  <strong>周五 19:00</strong>
+                  <span>空闲，可预约 1-2 小时</span>
+                  <button>选择</button>
                 </div>
-                <div class="option">
-                  <strong>方案 B：在家 Taco Bar</strong>
-                  <p>准备牛肉以外的鸡肉、豆类、蔬菜和酱料，朋友可以自己组合。</p>
+                <div class="slot booked" data-slot="周五 21:00">
+                  <strong>周五 21:00</strong>
+                  <span>已被 Alex 预约</span>
+                  <button>已订满</button>
                 </div>
-                <div class="option">
-                  <strong>方案 C：披萨 + 沙拉 + 甜点</strong>
-                  <p>最省心，适合临时人数变化。需要确认素食披萨和无牛肉选项。</p>
+                <div class="slot available" data-slot="周六 20:00">
+                  <strong>周六 20:00</strong>
+                  <span>热门时段，建议提前付款锁定</span>
+                  <button>已选择</button>
+                </div>
+                <div class="slot closed" data-slot="周六 22:00">
+                  <strong>周六 22:00</strong>
+                  <span>后台已关闭</span>
+                  <button>不可预约</button>
+                </div>
+                <div class="slot available" data-slot="周日 15:00">
+                  <strong>周日 15:00</strong>
+                  <span>适合休闲联机或聊天</span>
+                  <button>选择</button>
+                </div>
+                <div class="slot available" data-slot="周日 20:00">
+                  <strong>周日 20:00</strong>
+                  <span>可安排双排或组队</span>
+                  <button>选择</button>
+                </div>
+                <div class="slot closed" data-slot="周一 19:00">
+                  <strong>周一 19:00</strong>
+                  <span>后台已关闭</span>
+                  <button>不可预约</button>
+                </div>
+                <div class="slot available" data-slot="周二 21:00">
+                  <strong>周二 21:00</strong>
+                  <span>可预约 1 小时</span>
+                  <button>选择</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="columns">
+          <div class="admin-grid">
             <div class="panel">
               <div class="panel-header">
-                <h2 class="panel-title">准备清单</h2>
-                <span class="pill">本周时间线</span>
+                <h2 class="panel-title">后台订单</h2>
+                <span class="pill">仅管理员</span>
               </div>
               <div class="content">
-                <ul class="checklist">
-                  <li><span class="box done"></span><span>今天发出邀请，收集 RSVP 和饮食限制。</span></li>
-                  <li><span class="box"></span><span>周四确认人数，决定外卖还是在家做。</span></li>
-                  <li><span class="box"></span><span>周五买饮料、冰、纸巾、垃圾袋和简单零食。</span></li>
-                  <li><span class="box"></span><span>周六下午整理客厅，准备餐具和播放列表。</span></li>
-                </ul>
+                <div class="booking-list">
+                  <div class="booking">
+                    <div>
+                      <strong>Alex · 周五 21:00</strong>
+                      <span>英雄联盟双排 · 2 小时 · 已付款</span>
+                    </div>
+                    <span class="tag green">已确认</span>
+                  </div>
+                  <div class="booking">
+                    <div>
+                      <strong>Mina · 周六 20:00</strong>
+                      <span>聊天陪伴 · 1 小时 · 待付款</span>
+                    </div>
+                    <span class="tag amber">待确认</span>
+                  </div>
+                  <div class="booking">
+                    <div>
+                      <strong>Chris · 周日 15:00</strong>
+                      <span>Steam 休闲联机 · 3 小时 · 新订单</span>
+                    </div>
+                    <span class="tag blue">新预约</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="panel">
               <div class="panel-header">
-                <h2 class="panel-title">下一步功能</h2>
-                <span class="pill">V2</span>
+                <h2 class="panel-title">时段开关</h2>
+                <span class="pill off">后台控制</span>
               </div>
               <div class="content">
-                <div class="option">
-                  <strong>连接联系人</strong>
-                  <p>保存朋友偏好，下次自动记住谁素食、谁开车、谁适合带饮料。</p>
-                </div>
-                <div class="option">
-                  <strong>连接 Google 搜索</strong>
-                  <p>自动查附近餐厅、营业时间、评分和适合团体点餐的菜单。</p>
-                </div>
-                <div class="option">
-                  <strong>连接日历和提醒</strong>
-                  <p>自动生成日程、提醒你确认人数和购买物品。</p>
+                <div class="toggle-list">
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周五 19:00</strong>
+                      <span>开放给客户预约</span>
+                    </div>
+                    <button class="switch on" aria-label="周五 19:00 开关"></button>
+                  </div>
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周六 22:00</strong>
+                      <span>暂时不接单</span>
+                    </div>
+                    <button class="switch" aria-label="周六 22:00 开关"></button>
+                  </div>
+                  <div class="toggle-row">
+                    <div>
+                      <strong>周日 20:00</strong>
+                      <span>开放给客户预约</span>
+                    </div>
+                    <button class="switch on" aria-label="周日 20:00 开关"></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -672,22 +805,48 @@ Chris: 喜欢甜点，周六比较晚到</textarea>
   </div>
 
   <script>
-    const generateBtn = document.querySelector("#generateBtn");
-    const dateInput = document.querySelector("#dateInput");
-    const timeInput = document.querySelector("#timeInput");
-    const guestCount = document.querySelector("#guestCount");
-    const budget = document.querySelector("#budget");
-    const vibe = document.querySelector("#vibe");
-    const inviteText = document.querySelector("#inviteText");
-    const metricGuests = document.querySelector("#metricGuests");
-    const metricBudget = document.querySelector("#metricBudget");
+    const services = document.querySelectorAll(".service");
+    const slots = document.querySelectorAll(".slot.available");
+    const switches = document.querySelectorAll(".switch");
+    const selectedService = document.querySelector("#selectedService");
+    const selectedSlot = document.querySelector("#selectedSlot");
+    const selectedPrice = document.querySelector("#selectedPrice");
+    const checkoutBtn = document.querySelector("#checkoutBtn");
+    const openCount = document.querySelector("#openCount");
 
-    generateBtn.addEventListener("click", () => {
-      const people = guestCount.value.replace(" 人", "");
-      const money = budget.value.replace("约 ", "");
-      metricGuests.textContent = people;
-      metricBudget.textContent = money;
-      inviteText.textContent = `${dateInput.value}${timeInput.value}来我们家参加一个${vibe.value}吧。我会按 ${guestCount.value} 准备食物，预算大概是 ${budget.value}，也会照顾素食、不吃牛肉和爱吃辣的朋友。你能不能来回我一下就好，我会根据人数安排菜单和饮料。`;
+    services.forEach((service) => {
+      service.addEventListener("click", () => {
+        services.forEach((item) => item.classList.remove("active"));
+        service.classList.add("active");
+        selectedService.textContent = service.dataset.service;
+        selectedPrice.textContent = `$${service.dataset.price}`;
+      });
+    });
+
+    slots.forEach((slot) => {
+      slot.addEventListener("click", () => {
+        slots.forEach((item) => {
+          const button = item.querySelector("button");
+          if (button) button.textContent = "选择";
+        });
+        const button = slot.querySelector("button");
+        if (button) button.textContent = "已选择";
+        selectedSlot.textContent = slot.dataset.slot;
+      });
+    });
+
+    switches.forEach((button) => {
+      button.addEventListener("click", () => {
+        button.classList.toggle("on");
+        openCount.textContent = document.querySelectorAll(".switch.on").length + 3;
+      });
+    });
+
+    checkoutBtn.addEventListener("click", () => {
+      checkoutBtn.textContent = "订单已生成";
+      window.setTimeout(() => {
+        checkoutBtn.textContent = "模拟下单";
+      }, 1800);
     });
   </script>
 </body>
