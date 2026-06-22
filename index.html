@@ -88,14 +88,14 @@
             <label>想玩的内容<select><option>吃饭</option><option>KTV 唱歌</option><option>逛街</option><option>打三角洲</option></select></label>
             <div class="row"><label>预约日期<input value="本周六"></label><label>联系方式<input value="微信 / Discord"></label></div>
             <label>备注<textarea>希望轻松一点，主要想有人一起玩和聊天。</textarea></label>
-            <div class="service active" data-service="基础陪玩 1 小时" data-price="28"><div><strong>基础陪玩 1 小时</strong><span>适合临时开黑、聊天、熟悉节奏。</span></div><div class="price">$28</div></div>
-            <div class="service" data-service="深度陪玩 2 小时" data-price="50"><div><strong>深度陪玩 2 小时</strong><span>适合排位、任务推进或固定游戏夜。</span></div><div class="price">$50</div></div>
-            <div class="service" data-service="包场 3 小时" data-price="72"><div><strong>包场 3 小时</strong><span>适合朋友组队、活动陪玩或长时间陪伴。</span></div><div class="price">$72</div></div>
-            <div class="checkout"><div class="line"><span>已选项目</span><strong id="selectedService">基础陪玩 1 小时</strong></div><div class="line"><span>已选时间</span><strong id="selectedSlot">周六 20:00</strong></div><div class="line total"><span>应付金额</span><strong id="selectedPrice">$28</strong></div></div>
+            <div class="service active" data-service="基础陪玩 1 小时" data-price="1000"><div><strong>基础陪玩 1 小时</strong><span>适合临时开黑、聊天、熟悉节奏。</span></div><div class="price">¥1000</div></div>
+            <div class="service" data-service="深度陪玩 2 小时" data-price="2000"><div><strong>深度陪玩 2 小时</strong><span>适合排位、任务推进或固定游戏夜。</span></div><div class="price">¥2000</div></div>
+            <div class="service" data-service="包场 3 小时" data-price="3000"><div><strong>包场 3 小时</strong><span>适合朋友组队、活动陪玩或长时间陪伴。</span></div><div class="price">¥3000</div></div>
+            <div class="checkout"><div class="line"><span>已选项目</span><strong id="selectedService">基础陪玩 1 小时</strong></div><div class="line"><span>已选时间</span><strong id="selectedSlot">周六 20:00</strong></div><div class="line total"><span>应付金额</span><strong id="selectedPrice">¥1000</strong></div></div>
           </div>
         </div>
         <div class="stack">
-          <div class="stats"><div class="metric"><span>今日预约</span><strong>3</strong></div><div class="metric"><span>开放时段</span><strong id="openCount">5</strong></div><div class="metric"><span>待确认</span><strong>2</strong></div><div class="metric"><span>本周收入</span><strong>$178</strong></div></div>
+          <div class="stats"><div class="metric"><span>今日预约</span><strong>3</strong></div><div class="metric"><span>开放时段</span><strong id="openCount">5</strong></div><div class="metric"><span>待确认</span><strong>2</strong></div><div class="metric"><span>本周收入</span><strong>¥6000</strong></div></div>
           <div class="panel"><div class="head"><h2>可预约时间</h2><span class="pill">客户可见</span></div><div class="body calendar">
             <div class="slot available" data-slot="周五 19:00"><strong>周五 19:00</strong><span>空闲，可预约 1-2 小时</span><button>选择</button></div>
             <div class="slot booked"><strong>周五 21:00</strong><span>已被 Alex 预约</span><button>已订满</button></div>
@@ -124,7 +124,7 @@
   </div>
   <script>
     const services=document.querySelectorAll(".service"),slots=document.querySelectorAll(".slot.available"),switches=document.querySelectorAll(".switch");
-    services.forEach(s=>s.onclick=()=>{services.forEach(x=>x.classList.remove("active"));s.classList.add("active");selectedService.textContent=s.dataset.service;selectedPrice.textContent="$"+s.dataset.price;});
+    services.forEach(s=>s.onclick=()=>{services.forEach(x=>x.classList.remove("active"));s.classList.add("active");selectedService.textContent=s.dataset.service;selectedPrice.textContent="¥"+s.dataset.price;});
     slots.forEach(s=>s.onclick=()=>{slots.forEach(x=>x.querySelector("button").textContent="选择");s.querySelector("button").textContent="已选择";selectedSlot.textContent=s.dataset.slot;});
     switches.forEach(b=>b.onclick=()=>{b.classList.toggle("on");openCount.textContent=document.querySelectorAll(".switch.on").length+3;});
     checkoutBtn.onclick=()=>{checkoutBtn.textContent="订单已生成";setTimeout(()=>checkoutBtn.textContent="模拟下单",1600);};
